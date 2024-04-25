@@ -9,6 +9,7 @@ import styles from './styles';
 // //   AntDesign,
 // //   Fontisto,
 // } from "@expo/vector-icons";
+import { s } from "react-native-wind"
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -87,7 +88,7 @@ const Home = () => {
   return (
     <View style={[styles.container]}>
       <View style={[styles.header, styles.shadow]}>
-        <Text style={[styles.boldText, styles.dark]}>Synectiks Farms</Text>
+        <Text style={[styles.boldText, styles.dark ,s`text-blue-500`]}>Synectiks Farms</Text>
       </View>
 
       <Pressable
