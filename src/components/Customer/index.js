@@ -8,36 +8,25 @@ import {
   TouchableOpacity,
   Pressable,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   useNavigation,
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-// import { fetchingCustomers } from '../../Api/fetchCustomers';
-// import { addCustomer } from '../../redux/slice/customerSlice';
-
+import {s} from 'react-native-wind';
+import styles from './styles';
 const Customers = () => {
   const data = useSelector(state => state.CustomerSlice.customers);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
-  // const [Isloading,setIsloadig] = useState(true)
-  // const [customers] = useState([
-  //   {id: 1, name: 'John Doe', email: 'john@gmail.com'},
-  // ]);
 
   const navigation = useNavigation();
   const route = useRoute();
-  // const currentRouteName = navigation.route.name;
-  // console.log('routing name',currentRouteName)
-  // const currentRoute = route.name;
-  // const parentRoute = currentRoute.routes[currentRoute.index];
-  // console.log('parent route',parentRoute,'cureen',currentRoute)
   console.log('customers', data);
-  // const dispatch = useDispatch()
-  // const  = route.params.value
-  // const users = useSelector(state => state.CustomerSlice.users);
 
   const filterCustomers = (customers, query) => {
     if (!query) {
@@ -64,14 +53,10 @@ const Customers = () => {
     }
   };
 
-  // const addCustomer = () => {
-  //   console.log('addCustomer');
-  //   navigation.navigate('Adduser');
-  // };
   const total = route.params?.total;
   const items = route.params?.items;
-  const OrderData = route.params?.data
-  const order = route.params?.order
+  const OrderData = route.params?.data;
+  const order = route.params?.order;
   console.log('router values', total, items);
   console.log('router order value', OrderData);
   const navigateToAddUser = () => {
@@ -80,74 +65,46 @@ const Customers = () => {
     navigation.navigate('Adduser', {total: total, items: items});
   };
 
-  // const handleItemPress = item => {
-  //   console.log('Selected customer:', item);
-  //   navigation.navigate('Cash', {
-  //     total: total,
-  //     user: item,
-  //     items: items,
-  //   });
-  // };
   const handleItemPress = customer => {
     console.log('Selected customer:', customer);
-    console.log('route nm',navigation.getState().routes[0].name)
-    if(navigation.getState().routes[0].name == 'Settings')
-    {
-        console.log('customer details', customer)
-     }
-     else if( navigation.getState().routes[0].name  == 'HomePage' &&  navigation.getState().routes[1].name == 'Adduser') {
-      console.log('added a new user ',customer)
-     }
-     else if( navigation.getState().routes[0].name  == 'Settings' &&  navigation.getState().routes[2].name == 'Adduser') {
-      console.log('added a new user from settings ',customer)
-     }
-     else if(navigation.getState().routes[0].name == 'OrdersPage' && navigation.getState().routes[1].name == 'Order'){
-      console.log('updating order status')
-      navigation.navigate('Share',{order:order})
+    console.log('route nm', navigation.getState().routes[0].name);
+    if (navigation.getState().routes[0].name == 'Settings') {
+      console.log('customer details', customer);
+    } else if (
+      navigation.getState().routes[0].name == 'HomePage' &&
+      navigation.getState().routes[1].name == 'Adduser'
+    ) {
+      console.log('added a new user ', customer);
+    } else if (
+      navigation.getState().routes[0].name == 'Settings' &&
+      navigation.getState().routes[2].name == 'Adduser'
+    ) {
+      console.log('added a new user from settings ', customer);
+    } else if (
+      navigation.getState().routes[0].name == 'OrdersPage' &&
+      navigation.getState().routes[1].name == 'Order'
+    ) {
+      console.log('updating order status');
+      navigation.navigate('Share', {order: order});
       // navigation.navigate('Share',orderId)
-     }
-     else{
-      console.log('goint to cash to create product',{
+    } else {
+      console.log('goint to cash to create product', {
         total: total,
         user: customer,
         items: items,
-       })
-       navigation.navigate('Cash', {
-         total: total,
-         user: customer,
-         items: items,
-        })  
-      }
+      });
+      navigation.navigate('Cash', {
+        total: total,
+        user: customer,
+        items: items,
+      });
+    }
   };
-
-  //   const fetchCustomers = async () => {
-  //   try {
-  //     console.log('calling fetching');
-  //     const response = await fetchingCustomers();
-  //     console.log('after fetching');
-  //     const data = response;
-  //     console.log('customers data', data);
-  //     data.map(value => {
-  //       console.log('customer value', value);
-  //       dispatch(addCustomer(value));
-  //     });
-  //     setIsloadig(false)
-  //   } catch (error) {
-  //     console.log('orders error', error);
-  //   }
-  // };
 
   useEffect(() => {
     setFilteredCustomers(filterCustomers(data, searchQuery));
     // fetchCustomers()
   }, [data, searchQuery]);
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     setSearchQuery('');
-  //     setFilteredCustomers(data);
-  //   }, [data])
-  // );
 
   const renderItem = ({item}) => (
     <TouchableOpacity
@@ -163,79 +120,90 @@ const Customers = () => {
     </TouchableOpacity>
   );
 
-  // if (Isloading) {
-  //   return (
-  //     <View style={[styles.container, styles.loadingContainer]}>
-  //       <ActivityIndicator size="large" color="#0000ff" />
-  //     </View>
-  //   );
-  // }
-
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Search for customers..."
-        placeholderTextColor="black"
-
-        value={searchQuery}
-        onChangeText={handleSearchQueryChange}
-      />
-      <FlatList
-        data={filteredCustomers}
-        renderItem={renderItem}
-        keyExtractor={item => item?.id.toString()+'-'+Math.random()}
-      />
-      <Pressable
-        style={{
-          backgroundColor: 'blue',
-          padding: 10,
-          borderRadius: 5,
-          marginTop: 10,
-        }}
-        onPress={navigateToAddUser}>
-        <Text style={{color: 'white', textAlign: 'center', fontSize: 16}}>
-          Add Customer
+    <ScrollView style={[s`bg-white`]}>
+      <View style={[s`bg-gray-200 flex flex-row justify-between p-2 m-2 `]}>
+        <Text
+          style={[s`text-lg p-2 w-fit h-fit text-center`, styles.textPrimary]}>
+          ID
         </Text>
-      </Pressable>
-    </View>
+        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Customer Name</Text>
+        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Email</Text>
+        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>
+          Contact Number
+        </Text>
+        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Added on</Text>
+        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>
+          Last Purchase Item
+        </Text>
+        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Action</Text>
+      </View>
+      {data.map((customer, i) => {
+          if(i%2 == 0){
+            return (
+              <View style={[s`bg-white flex flex-row justify-between p-2 m-1 rounded-lg`]} key={i}>
+            <Text
+              style={[
+                s`text-lg p-2  w-fit h-fit text-center text-black`,
+               ,
+              ]}>
+              {customer.id}
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              {customer.name}
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>Email</Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              {customer.phone}
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>Added on</Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              Last Purchase Item
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={18}
+                color="#000"
+              />
+            </Text>
+          </View>
+            )
+          }
+        else{
+          return (
+            <View style={[s`bg-gray-200 flex flex-row justify-between p-2 m-1 rounded-lg`]} key={i}>
+            <Text
+              style={[
+                s`text-lg p-2  w-fit h-fit text-center text-black`,
+              ]}>
+              {customer.id}
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              {customer.name}
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>Email</Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              {customer.phone}
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>Added on</Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              Last Purchase Item
+            </Text>
+            <Text style={[s`text-lg p-2 text-black`, ]}>
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={18}
+                color="#000"
+              />
+            </Text>
+          </View>
+          )
+        }
+        
+      })}
+    </ScrollView>
   );
 };
 
 export default Customers;
-
-const styles = {
-  container: {
-    flex: 1,
-    padding: 16,
-    marginTop: 25,
-    color: 'black',
-  },
-  input: {
-    marginBottom: 16,
-    padding: 10,
-    borderWidth: 1,
-    color:'black'
-  },
-  customerContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  customerInfo: {
-    flex: 1,
-  },
-  customerName: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 4,
-    color: 'black',
-  },
-  customerEmail: {
-    fontSize: 14,
-    color: '#666',
-  },
-};
