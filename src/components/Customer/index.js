@@ -4,13 +4,14 @@ import {
   View,
   Text,
   TextInput,
-  FlatList,
   TouchableOpacity,
   Pressable,
   ActivityIndicator,
   ScrollView,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+
 import {
   useNavigation,
   useRoute,
@@ -121,88 +122,154 @@ const Customers = () => {
   );
 
   return (
-    <ScrollView style={[s`bg-white`]}>
-      <View style={[s`bg-gray-200 flex flex-row justify-between p-2 m-2 `]}>
-        <Text
-          style={[s`text-lg p-2 w-fit h-fit text-center`, styles.textPrimary]}>
-          ID
-        </Text>
-        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Customer Name</Text>
-        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Email</Text>
-        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>
-          Contact Number
-        </Text>
-        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Added on</Text>
-        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>
-          Last Purchase Item
-        </Text>
-        <Text style={[s`text-lg p-2 `, styles.textPrimary]}>Action</Text>
+    <View style={[s`flex justify-between`]}>
+      <View
+        style={[
+          s`bg-blue-400 flex justify-between flex-row px-3 items-center`,
+          styles.header,
+        ]}>
+        <View style={[s`bg-green-300 flex justify-center items-start`]}>
+          <View style={[s`flex flex-row items-center`]}>
+            <Text style={[s`text-xl mx-2 my-1 font-bold`, styles.textBlack]}>
+              Customers
+            </Text>
+            <Text
+              style={[
+                s`text-sm p-1 text-center rounded`,
+                styles.textPrimary,
+                styles.bgTertiary,
+              ]}>
+              {' '}
+              {'2'} New Customers
+            </Text>
+          </View>
+          <Text style={[s`text-sm mx-2`, styles.textGrey]}>
+            see all customers here
+          </Text>
+        </View>
+        <View style={[s`flex flex-row`]}>
+          <View style={[s`w-30 `, styles.bgSecondary]}>
+          <TextInput
+        style={[s`border mb-2 p-2 `]}
+        placeholder="Search for customers..."
+        placeholderTextColor="black"
+
+        value={searchQuery}
+        onChangeText={handleSearchQueryChange}
+      />
+          </View>
+          <Pressable style={[s`text-lg flex flex-row p-2 items-center rounded`,  styles.bgPrimary]}>
+            <AntDesign
+              name="plus"
+              size={18}
+              color="#F5F5F5"
+            />
+            <Text style={[s`text-lg mx-2`,styles.textWhite]}>New Customer</Text>
+          </Pressable>
+        </View>
       </View>
-      {data.map((customer, i) => {
-          if(i%2 == 0){
+      <View style={[s`bg-white`, styles.table]}>
+        <View style={[s`bg-gray-200 flex flex-row justify-between p-1 m-1 `]}>
+          <Text
+            style={[
+              s`text-lg p-1 w-fit h-fit text-center `,
+              styles.textPrimary,
+            ]}>
+            ID
+          </Text>
+          <Text style={[s`text-lg p-1  `, styles.textPrimary]}>
+            Customer Name
+          </Text>
+          <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Email</Text>
+          <Text style={[s`text-lg p-1  `, styles.textPrimary]}>
+            Contact Number
+          </Text>
+          <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Added on</Text>
+          <Text style={[s`text-lg p-1  `, styles.textPrimary]}>
+            Last Purchase Item
+          </Text>
+          <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Action</Text>
+        </View>
+        {data.map((customer, i) => {
+          if (i % 2 == 0) {
             return (
-              <View style={[s`bg-white flex flex-row justify-between p-2 m-1 rounded-lg`]} key={i}>
-            <Text
-              style={[
-                s`text-lg p-2  w-fit h-fit text-center text-black`,
-               ,
-              ]}>
-              {customer.id}
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              {customer.name}
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>Email</Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              {customer.phone}
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>Added on</Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              Last Purchase Item
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              <MaterialCommunityIcons
-                name="dots-horizontal"
-                size={18}
-                color="#000"
-              />
-            </Text>
-          </View>
-            )
+              <View
+                style={[
+                  s`bg-red-300 flex flex-row justify-between  px-1 rounded-lg`,
+                ]}
+                key={i}>
+                <Text
+                  style={[
+                    s`text-lg p-1  w-fit h-fit text-center text-black border m-1`,
+                    ,
+                  ]}>
+                  {customer.id}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  {customer.name}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  Email
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  {customer.phone}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  Added on
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  Last Purchase Item
+                </Text>
+                <Pressable style={[s`text-lg p-1 text-black border m-1`]}>
+                  <MaterialCommunityIcons
+                    name="dots-horizontal"
+                    size={18}
+                    color="#000"
+                  />
+                </Pressable>
+              </View>
+            );
+          } else {
+            return (
+              <View
+                style={[
+                  s`bg-gray-200 flex flex-row justify-between px-1  rounded-lg`,
+                ]}
+                key={i}>
+                <Text
+                  style={[
+                    s`text-lg   w-fit h-fit text-center text-black border m-1`,
+                  ]}>
+                  {customer.id}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  {customer.name}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  Email
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  {customer.phone}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  Added on
+                </Text>
+                <Text style={[s`text-lg p-1 text-black border m-1`]}>
+                  Last Purchase Item
+                </Text>
+                <Pressable style={[s`text-lg p-1 text-black border m-1`]}>
+                  <MaterialCommunityIcons
+                    name="dots-horizontal"
+                    size={18}
+                    color="#000"
+                  />
+                </Pressable>
+              </View>
+            );
           }
-        else{
-          return (
-            <View style={[s`bg-gray-200 flex flex-row justify-between p-2 m-1 rounded-lg`]} key={i}>
-            <Text
-              style={[
-                s`text-lg p-2  w-fit h-fit text-center text-black`,
-              ]}>
-              {customer.id}
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              {customer.name}
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>Email</Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              {customer.phone}
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>Added on</Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              Last Purchase Item
-            </Text>
-            <Text style={[s`text-lg p-2 text-black`, ]}>
-              <MaterialCommunityIcons
-                name="dots-horizontal"
-                size={18}
-                color="#000"
-              />
-            </Text>
-          </View>
-          )
-        }
-        
-      })}
-    </ScrollView>
+        })}
+      </View>
+    </View>
   );
 };
 
