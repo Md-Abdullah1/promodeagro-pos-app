@@ -42,8 +42,24 @@ const CustomerSlice = createSlice({
       }
     },
     addCustomer: (state, action) => {
-      state.customers.push(action.payload);
-      console.log('added user in slice', action.payload);
+      // state.customers.push(action.payload);
+      // console.log('added user in slice', action.payload);
+
+      const existingCustomer = state.customers.findIndex(
+        item => item.id === action.payload.id,
+      );
+
+      console.log('finding index of existingCustomer', existingCustomer);
+      console.log('action to add existingCustomer', action.payload);
+
+      if (existingCustomer === -1) {
+        state.customers.push(action.payload);
+        console.log('in redux dispathing customer ', action.payload);
+      } else {
+        console.log('previouse customer', existingCustomer);
+        state.customers.splice(existingCustomer, 1, action.payload);
+        console.log(`updated customer ${action.payload}`);
+      }
     },
     // addToCart: (state, action) => {
     //   // Find existing item with the same ID

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import ModalDropdown from 'react-native-modal-dropdown';
 import {
   View,
   Text,
@@ -8,6 +9,7 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
+  Modal
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -24,6 +26,8 @@ const Customers = () => {
   const data = useSelector(state => state.CustomerSlice.customers);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -40,6 +44,8 @@ const Customers = () => {
           customer.name.toLowerCase().includes(query.toLowerCase())) ||
         (customer.email &&
           customer.email.toLowerCase().includes(query.toLowerCase())) ||
+        (customer.id &&
+          customer.id.toLowerCase().includes(query.toLowerCase())) ||
         (customer.phone &&
           customer.phone.toLowerCase().includes(query.toLowerCase())),
     );
@@ -53,7 +59,16 @@ const Customers = () => {
       setFilteredCustomers(data);
     }
   };
-
+ const handleActionSelect = (index, value, customer) => {
+    setShowModal(false);
+    if (value === 'Edit') {
+      // Handle Edit action
+      console.log('Edit customer:', customer);
+    } else if (value === 'Delete') {
+      // Handle Delete action
+      console.log('Delete customer:', customer);
+    }
+  };
   const total = route.params?.total;
   const items = route.params?.items;
   const OrderData = route.params?.data;
@@ -69,37 +84,39 @@ const Customers = () => {
   const handleItemPress = customer => {
     console.log('Selected customer:', customer);
     console.log('route nm', navigation.getState().routes[0].name);
-    if (navigation.getState().routes[0].name == 'Settings') {
-      console.log('customer details', customer);
-    } else if (
-      navigation.getState().routes[0].name == 'HomePage' &&
-      navigation.getState().routes[1].name == 'Adduser'
-    ) {
-      console.log('added a new user ', customer);
-    } else if (
-      navigation.getState().routes[0].name == 'Settings' &&
-      navigation.getState().routes[2].name == 'Adduser'
-    ) {
-      console.log('added a new user from settings ', customer);
-    } else if (
-      navigation.getState().routes[0].name == 'OrdersPage' &&
-      navigation.getState().routes[1].name == 'Order'
-    ) {
-      console.log('updating order status');
-      navigation.navigate('Share', {order: order});
-      // navigation.navigate('Share',orderId)
-    } else {
-      console.log('goint to cash to create product', {
-        total: total,
-        user: customer,
-        items: items,
-      });
-      navigation.navigate('Cash', {
-        total: total,
-        user: customer,
-        items: items,
-      });
-    }
+    setSelectedCustomer(customer);
+    setShowModal(!showModal);
+    // if (navigation.getState().routes[0].name == 'Settings') {
+    //   console.log('customer details', customer);
+    // } else if (
+    //   navigation.getState().routes[0].name == 'HomePage' &&
+    //   navigation.getState().routes[1].name == 'Adduser'
+    // ) {
+    //   console.log('added a new user ', customer);
+    // } else if (
+    //   navigation.getState().routes[0].name == 'Settings' &&
+    //   navigation.getState().routes[2].name == 'Adduser'
+    // ) {
+    //   console.log('added a new user from settings ', customer);
+    // } else if (
+    //   navigation.getState().routes[0].name == 'OrdersPage' &&
+    //   navigation.getState().routes[1].name == 'Order'
+    // ) {
+    //   console.log('updating order status');
+    //   navigation.navigate('Share', {order: order});
+    //   // navigation.navigate('Share',orderId)
+    // } else {
+    //   console.log('goint to cash to create product', {
+    //     total: total,
+    //     user: customer,
+    //     items: items,
+    //   });
+    //   navigation.navigate('Cash', {
+    //     total: total,
+    //     user: customer,
+    //     items: items,
+    //   });
+    // }
   };
 
   useEffect(() => {
@@ -107,28 +124,14 @@ const Customers = () => {
     // fetchCustomers()
   }, [data, searchQuery]);
 
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      style={styles.customerContainer}
-      onPress={() => handleItemPress(item)}>
-      <View style={styles.customerInfo}>
-        <Text style={styles.customerName}>{item.name}</Text>
-        <Text style={styles.customerEmail}>+91 {item.phone}</Text>
-      </View>
-      <Text>
-        <Icon name="arrow-forward" />
-      </Text>
-    </TouchableOpacity>
-  );
-
   return (
-    <View style={[s`flex justify-between`]}>
+    <View style={[s`flex w-full`, styles.bgWhite]}>
       <View
         style={[
-          s`bg-blue-400 flex justify-between flex-row px-3 items-center`,
+          s` flex justify-between flex-row px-3 items-center`,
           styles.header,
         ]}>
-        <View style={[s`bg-green-300 flex justify-center items-start`]}>
+        <View style={[s` flex justify-center items-start`]}>
           <View style={[s`flex flex-row items-center`]}>
             <Text style={[s`text-xl mx-2 my-1 font-bold`, styles.textBlack]}>
               Customers
@@ -147,29 +150,35 @@ const Customers = () => {
             see all customers here
           </Text>
         </View>
-        <View style={[s`flex flex-row`]}>
-          <View style={[s`w-30 `, styles.bgSecondary]}>
+        <View
+          style={[
+            s`flex flex-row items-center  justify-between h-fit`,
+            styles.headerRight,
+          ]}>
           <TextInput
-        style={[s`border mb-2 p-2 `]}
-        placeholder="Search for customers..."
-        placeholderTextColor="black"
+            style={[s`border  rounded p-2 self-center `, styles.searchBar]}
+            placeholder="Search for customers..."
+            placeholderTextColor="#9F9F9E"
+            value={searchQuery}
+            onChangeText={handleSearchQueryChange}
+          />
 
-        value={searchQuery}
-        onChangeText={handleSearchQueryChange}
-      />
-          </View>
-          <Pressable style={[s`text-lg flex flex-row p-2 items-center rounded`,  styles.bgPrimary]}>
-            <AntDesign
-              name="plus"
-              size={18}
-              color="#F5F5F5"
-            />
-            <Text style={[s`text-lg mx-2`,styles.textWhite]}>New Customer</Text>
+          <Pressable
+            style={[
+              s`text-lg flex flex-row p-2 items-center rounded`,
+              styles.bgPrimary,
+            ]}
+            onPress={navigateToAddUser}>
+            <AntDesign name="plus" size={18} color="#F5F5F5" />
+            <Text style={[s`text-lg mx-2`, styles.textWhite]}>
+              New Customer
+            </Text>
           </Pressable>
         </View>
       </View>
-      <View style={[s`bg-white`, styles.table]}>
-        <View style={[s`bg-gray-200 flex flex-row justify-between p-1 m-1 `]}>
+      <ScrollView style={[s`bg-white  m-1 my-3 p-1`, styles.table]}>
+        <View
+          style={[s`flex flex-row justify-between p-1 m-1 `, styles.bgWhite]}>
           <Text
             style={[
               s`text-lg p-1 w-fit h-fit text-center `,
@@ -190,85 +199,148 @@ const Customers = () => {
           </Text>
           <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Action</Text>
         </View>
-        {data.map((customer, i) => {
-          if (i % 2 == 0) {
-            return (
-              <View
-                style={[
-                  s`bg-red-300 flex flex-row justify-between  px-1 rounded-lg`,
-                ]}
-                key={i}>
-                <Text
+        {filteredCustomers &&
+          filteredCustomers.map((customer, i) => {
+            if (i % 2 == 0) {
+              return (
+                <View
                   style={[
-                    s`text-lg p-1  w-fit h-fit text-center text-black border m-1`,
-                    ,
-                  ]}>
-                  {customer.id}
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  {customer.name}
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  Email
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  {customer.phone}
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  Added on
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  Last Purchase Item
-                </Text>
-                <Pressable style={[s`text-lg p-1 text-black border m-1`]}>
-                  <MaterialCommunityIcons
-                    name="dots-horizontal"
-                    size={18}
-                    color="#000"
-                  />
-                </Pressable>
-              </View>
-            );
-          } else {
-            return (
-              <View
-                style={[
-                  s`bg-gray-200 flex flex-row justify-between px-1  rounded-lg`,
-                ]}
-                key={i}>
-                <Text
+                    s` flex flex-row justify-between  px-1 rounded-lg py-1 bg-white`,
+                  ]}
+                  key={i}>
+                  <Text
+                    style={[
+                      s`text-lg p-1  w-fit h-fit text-center text-black  m-1`,
+                      ,
+                    ]}>
+                    {customer.id}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    {customer.name}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Email</Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    {customer.phone}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Added on</Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    Last Purchase Item
+                  </Text>
+                  <Pressable style={[s`text-lg p-1 text-black  m-1`]}
+                  onPress={()=>handleItemPress(customer)}>
+                    {(<MaterialCommunityIcons
+                      name="dots-horizontal"
+                      size={18}
+                      color="#000"
+                    />)}
+                  </Pressable>
+                  {selectedCustomer && selectedCustomer.id === customer.id &&  (
+                    // <Modal
+                    //   animationType="slide"
+                    //   // transparent={true}
+                    //   // visible={showModal}
+                    //   // onRequestClose={() => setModalVisible(false)}
+                    //   >
+                    //   <View
+                    //     style={[
+                    //       s`flex flex-1 justify-center items-center`,
+                    //       // styles.modalContainer,
+                    //     ]}>
+                    //     <View
+                    //       style={[
+                    //         s`bg-white p-4 rounded-lg`,
+                    //         // styles.modalContent,
+                    //       ]}>
+                    //       {/* Your action options go here */}
+                    //       <TouchableOpacity>
+                    //         <Text>Edit</Text>
+                    //       </TouchableOpacity>
+                    //       <TouchableOpacity>
+                    //         <Text>Delete</Text>
+                    //       </TouchableOpacity>
+                    //     </View>
+                    //   </View>
+                    // </Modal>
+                    <ModalDropdown
+                    options={['Edit', 'Delete']}
+                    defaultValue={'Edit'} 
+                    onSelect={(index, value) =>
+                      handleActionSelect(index, value, customer)
+                    }></ModalDropdown>
+                  )}
+                </View>
+              );
+            } else {
+              return (
+                <View
                   style={[
-                    s`text-lg   w-fit h-fit text-center text-black border m-1`,
-                  ]}>
-                  {customer.id}
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  {customer.name}
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  Email
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  {customer.phone}
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  Added on
-                </Text>
-                <Text style={[s`text-lg p-1 text-black border m-1`]}>
-                  Last Purchase Item
-                </Text>
-                <Pressable style={[s`text-lg p-1 text-black border m-1`]}>
-                  <MaterialCommunityIcons
-                    name="dots-horizontal"
-                    size={18}
-                    color="#000"
-                  />
-                </Pressable>
-              </View>
-            );
-          }
-        })}
-      </View>
+                    s` flex flex-row justify-between px-1  rounded-lg`,styles.bgWhite
+                  ]}
+                  key={i}>
+                  <Text
+                    style={[
+                      s`text-lg   w-fit h-fit text-center text-black  m-1`,
+                    ]}>
+                    {customer.id}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    {customer.name}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Email</Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    {customer.phone}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Added on</Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    Last Purchase Item
+                  </Text>
+                  <Pressable style={[s`text-lg p-1 text-black  m-1`]}
+                  onPress={()=>handleItemPress(customer)}>
+                    {  (<MaterialCommunityIcons
+                      name="dots-horizontal"
+                      size={18}
+                      color="#000"
+                    />)}
+                  </Pressable>
+                  {selectedCustomer && selectedCustomer.id === customer.id &&  (
+                    // <Modal
+                    //   animationType="slide"
+                    //   // transparent={true}
+                    //   // visible={showModal}
+                    //   // onRequestClose={() => setModalVisible(false)}
+                    //   >
+                    //   <View
+                    //     style={[
+                    //       s`flex flex-1 justify-center items-center`,
+                    //       // styles.modalContainer,
+                    //     ]}>
+                    //     <View
+                    //       style={[
+                    //         s`bg-white p-4 rounded-lg`,
+                    //         // styles.modalContent,
+                    //       ]}>
+                    //       {/* Your action options go here */}
+                    //       <TouchableOpacity>
+                    //         <Text>Edit</Text>
+                    //       </TouchableOpacity>
+                    //       <TouchableOpacity>
+                    //         <Text>Delete</Text>
+                    //       </TouchableOpacity>
+                    //     </View>
+                    //   </View>
+                    // </Modal>
+                    <ModalDropdown
+                    options={['Edit', 'Delete']}
+                    defaultValue={'Edit'} 
+                    onSelect={(index, value) =>
+                      handleActionSelect(index, value, customer)
+                    }></ModalDropdown>
+                  )}
+                </View>
+              );
+            }
+          })}
+      </ScrollView>
     </View>
   );
 };
