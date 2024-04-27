@@ -42,8 +42,19 @@ export default StyleSheet.create({
       height:'10%',
       width:'100%',
     },
+    headerRight:{
+      width:'50%',
+    },
+    searchBar:{
+      width:'65%',
+      // height:'100%',
+      borderColor:'#9F9F9E',
+      
+    },
+
     table:{
-      width:'100%'
+      width:'100%',
+      overflow:'scroll',
     }
   
 })
