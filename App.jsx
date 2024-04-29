@@ -1,5 +1,8 @@
   import React ,{ useState } from 'react';
   import Ionicons from 'react-native-vector-icons/Ionicons';
+
+  import * as eva from '@eva-design/eva';
+import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
   //redux
   import {store} from './src/redux/store/store';
   import {Provider, useSelector} from 'react-redux';
@@ -8,7 +11,7 @@
   import {NavigationContainer} from '@react-navigation/native';
   import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
   import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
+  
   // Screens
   import Home from './src/components/Home';
   import Adduser from './src/components/Adduser';
@@ -122,9 +125,9 @@
     const isSignedIn = useSelector(state => state.CustomerSlice.isSignedIn);
 
     
-    function changeSignIn(value){
-      setIsSignedIn(value);
-    }
+    // function changeSignIn(value){
+    //   setIsSignedIn(value);
+    // }
     const HomeScreen = () => (
       <Stack.Navigator
         screenOptions={{
@@ -192,4 +195,8 @@
     );
   };
 
-  export default App;
+  export default () =>(
+    <ApplicationProvider {...eva} theme={eva.light}>
+      <App/>
+    </ApplicationProvider>
+  )

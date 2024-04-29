@@ -55,6 +55,10 @@ export default StyleSheet.create({
     table:{
       width:'100%',
       overflow:'scroll',
-    }
+    },
+    menuItem: {
+      flexDirection: 'row', // Align title and icon horizontally
+      alignItems: 'center', // Center the content vertically
+    },
   
 })
