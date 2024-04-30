@@ -41,42 +41,38 @@ export default StyleSheet.create({
     bgPureWhite: {
       backgroundColor: '#FFFFFF',
     },
-    header:{
-      height:'10%',
-      width:'100%',
-      position: 'absolute',
-       top: 0,
-        left: 0,
-         right: 0 ,
-    },
-    headerRight:{
-      width:'50%',
-    },
-    searchBar:{
-      width:'65%',
-      // height:'100%',
-      borderColor:'#9F9F9E',
-      
-    },
-
-    table:{
-      width:'100%',
-      overflow:'scroll',
-    },
-    menu:{
-      position:'absolute',
-      right:0,
-      top:0,
-      shadowColor:'#000',
-      shadowOffset: { width: 2, height: 4 }, 
-      shadowOpacity: 0.50, 
-      shadowRadius: 3.84, 
-      elevation: 5,
-    },
-    menuItem: {
-      flexDirection: 'row', 
-      borderBottomColor:'#9F9F9E',
-      // borderWidth:1,
-    },
-  
+   input:{
+    borderWidth: 0.3,
+    borderColor: '#171826',
+    color: '#171826',
+    borderRadius:3,
+   },
+   leftPart:{
+    width:'60%',
+    backgroundColor:'violet',
+   },
+   rightPart:{
+    width:'35%',
+    backgroundColor:'skyblue'
+   },
+   inputBoxFull:{
+    flex:1,
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
+    width:'90%',
+   },
+   inputBoxHalf:{
+    flex:1,
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
+    width:'45%',
+   },
+   lower:{
+    height:'5%',
+    // width:'100%'
+   },
+   upper:{
+    height:"70%",
+    width:'100%',
+   }
 })
