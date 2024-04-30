@@ -19,9 +19,10 @@ import {
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {s} from 'react-native-wind';
 import styles from './styles';
+import { deleteCustomer } from '../../redux/slice/customerSlice';
 const Customers = () => {
   const data = useSelector(state => state.CustomerSlice.customers);
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,6 +32,7 @@ const Customers = () => {
 
   const navigation = useNavigation();
   const route = useRoute();
+  const dispatch =  useDispatch()
   console.log('customers', data);
 
   const filterCustomers = (customers, query) => {
@@ -59,16 +61,7 @@ const Customers = () => {
       setFilteredCustomers(data);
     }
   };
-  const handleActionSelect = (index, value, customer) => {
-    setShowModal(false);
-    if (value === 'Edit') {
-      // Handle Edit action
-      console.log('Edit customer:', customer);
-    } else if (value === 'Delete') {
-      // Handle Delete action
-      console.log('Delete customer:', customer);
-    }
-  };
+ 
   const total = route.params?.total;
   const items = route.params?.items;
   const OrderData = route.params?.data;
@@ -124,18 +117,27 @@ const Customers = () => {
     // fetchCustomers()
   }, [data, searchQuery]);
 
-  const StarIcon = ({name = 'star', ...props})=> (
-    <UIcon
-      {...props}
-      name={name}
-    />
-  );
+  const handleActionSelect = (action, customer) => {
+    setShowModal(false); // Close the options modal
+    if (action === 'Order History') {
+      //  Order History action
+      console.log('View order history for customer:', customer);
+    } else if (action === 'Edit') {
+      console.log('navigating to Edit customer:', customer);
+     navigation.navigate('Adduser', {customer:customer});
+    } else if (action === 'Delete') {
+      
+      console.log('Deleting  customer:', customer);
+      // delete api of customer
+      dispatch(deleteCustomer(customer))
+    }
+  };
 
   return (
-    <View style={[s`flex w-full`, styles.bgWhite]}>
+    <View style={[s`flex w-full relative`, styles.bgWhite]}>
       <View
         style={[
-          s` flex justify-between flex-row px-3 items-center`,
+          s` flex justify-between flex-row px-3 items-center mt-1 min-h-20  z-10 `,
           styles.header,
         ]}>
         <View style={[s` flex justify-center items-start`]}>
@@ -183,7 +185,7 @@ const Customers = () => {
           </Pressable>
         </View>
       </View>
-      <ScrollView style={[s`bg-white  m-1 my-3 p-1`, styles.table]}>
+      <ScrollView style={[s`bg-white  m-1 mt-20 p-1`, styles.table]}>
         <View
           style={[s`flex flex-row justify-between p-1 m-1 `, styles.bgWhite]}>
           <Text
@@ -208,12 +210,12 @@ const Customers = () => {
         </View>
         {filteredCustomers &&
           filteredCustomers.map((customer, i) => {
-            if (i % 2 == 0) {
+            
+
               return (
                 <View
                   style={[
-                    s` flex flex-row justify-between  px-1 rounded-lg py-1 bg-white`,
-                  ]}
+                    s` flex flex-row justify-between px-1 rounded-lg py-1 relative z-10`,(i%2 == 0) ? (styles.bgPureWhite): (styles.bgWhite)]}
                   key={i}>
                   <Text
                     style={[
@@ -245,149 +247,29 @@ const Customers = () => {
                     }
                   </Pressable>
                   {selectedCustomer && selectedCustomer.id === customer.id && (
-                    // <Modal
-                    //   animationType="slide"
-                    //   // transparent={true}
-                    //   // visible={showModal}
-                    //   // onRequestClose={() => setModalVisible(false)}
-                    //   >
-                    //   <View
-                    //     style={[
-                    //       s`flex flex-1 justify-center items-center`,
-                    //       // styles.modalContainer,
-                    //     ]}>
-                    //     <View
-                    //       style={[
-                    //         s`bg-white p-4 rounded-lg`,
-                    //         // styles.modalContent,
-                    //       ]}>
-                    //       {/* Your action options go here */}
-                    //       <TouchableOpacity>
-                    //         <Text>Edit</Text>
-                    //       </TouchableOpacity>
-                    //       <TouchableOpacity>
-                    //         <Text>Delete</Text>
-                    //       </TouchableOpacity>
-                    //     </View>
-                    //   </View>
-                    // </Modal>
-                    <Menu style={[s`bg-blue-400 p-2 flex flex-row`]}>
-                      <MenuItem
-                      style={[s`text-center`,styles.menuItem]}
-                        title="Order History"
-                        // onPress={onUsersPress}
-                      />
-                      <MenuItem
-                      style={[s`flex justify-center items-center p-2  bg-gray-400`,styles.menuItem]}
-
-                        title="Edit"
-                        accessoryRight={StarIcon}
-                        // accessoryLeft="never"
-                        // onPress={onOrdersPress}
-                      />
+                    <View style={[s` flex items-center w-24 h-20  z-30 right-0 absolute `,styles.menu,styles.bgPureWhite]}>
+                      <Pressable style={[s`  z-20`,styles.menuItem ,styles.textBlack]}
+                      onPress={() => handleActionSelect('Order History', customer)}>
+                        <Text>Order History</Text>
+                      </Pressable>
+                      <Pressable style={[s` z-20`,styles.menuItem ,styles.textBlack]}
+                      onPress={() => handleActionSelect('Edit', customer)}>
+                        <Text>Edit</Text>
+                      </Pressable>
+                      <Pressable style={[s`  z-20`,styles.menuItem ,styles.textBlack]}
+                      onPress={() => handleActionSelect('Delete', customer)}>
+                        <Text>Delete</Text>
+                      </Pressable>
+                    </View>
+                    
+                    
                       
-                      <MenuItem
-                      // style={[s`text-center`]}
-
-                        title="Delete"
-                        style={[s`bg-yellow-300`,styles.textBlack,styles.menuItem]}
-                        onPress={() => console.log('clicked ')}
-                      />
-                    </Menu>
+                    
                    
                   )}
                 </View>
               );
-            } else {
-              return (
-                <View
-                  style={[
-                    s` flex flex-row justify-between px-1  rounded-lg`,
-                    styles.bgWhite,
-                  ]}
-                  key={i}>
-                  <Text
-                    style={[
-                      s`text-lg   w-fit h-fit text-center text-black  m-1`,
-                    ]}>
-                    {customer.id}
-                  </Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
-                    {customer.name}
-                  </Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Email</Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
-                    {customer.phone}
-                  </Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Added on</Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
-                    Last Purchase Item
-                  </Text>
-                  <Pressable
-                    style={[s`text-lg p-1 text-black relative m-1`]}
-                    onPress={() => handleItemPress(customer)}>
-                    {
-                      <MaterialCommunityIcons
-                        name="dots-horizontal"
-                        size={18}
-                        color="#000"
-                      />
-                    }
-                  </Pressable>
-                  {selectedCustomer && selectedCustomer.id === customer.id && (
-                    // <Modal
-                    //   animationType="slide"
-                    //   // transparent={true}
-                    //   // visible={showModal}
-                    //   // onRequestClose={() => setModalVisible(false)}
-                    //   >
-                    //   <View
-                    //     style={[
-                    //       s`flex flex-1 justify-center items-center`,
-                    //       // styles.modalContainer,
-                    //     ]}>
-                    //     <View
-                    //       style={[
-                    //         s`bg-white p-4 rounded-lg`,
-                    //         // styles.modalContent,
-                    //       ]}>
-                    //       {/* Your action options go here */}
-                    //       <TouchableOpacity>
-                    //         <Text>Edit</Text>
-                    //       </TouchableOpacity>
-                    //       <TouchableOpacity>
-                    //         <Text>Delete</Text>
-                    //       </TouchableOpacity>
-                    //     </View>
-                    //   </View>
-                    // </Modal>
-                    <Menu style={[s`bg-blue-400 p-2 flex flex-row`]}>
-                    <MenuItem
-                    style={[s`text-center`,styles.menuItem]}
-                      title="Order History"
-                      // onPress={onUsersPress}
-                    />
-                    <MenuItem
-                    style={[s`flex justify-center items-center p-2  bg-gray-400`,styles.menuItem]}
-
-                      title="Edit"
-                      accessoryRight={<StarIcon name="star"/>}
-                      // accessoryLeft="never"
-                      // onPress={onOrdersPress}
-                    />
-                    
-                    <MenuItem
-                    // style={[s`text-center`]}
-
-                      title="Delete"
-                      style={[s`bg-yellow-300`,styles.textBlack,styles.menuItem]}
-                      onPress={() => console.log('clicked ')}
-                    />
-                  </Menu>
-                  )}
-                </View>
-              );
-            }
+           
           })}
       </ScrollView>
     </View>

@@ -61,41 +61,7 @@ const CustomerSlice = createSlice({
         console.log(`updated customer ${action.payload}`);
       }
     },
-    // addToCart: (state, action) => {
-    //   // Find existing item with the same ID
-    //   const existingItem = state.cart.find(
-    //     item => item.id === action.payload.id,
-    //   );
-
-    //   // If item exists, update its quantity
-    //   if (existingItem) {
-    //     console.log('existing', existingItem);
-    //     existingItem.quantity++;
-    //     existingItem.totalPrice = existingItem.price * existingItem.quantity;
-    //     console.log('existing', existingItem);
-
-    //     // localStorage.setItem('cart', JSON.stringify(state.cart));
-    //     // Modify the draft directly (Immer handles immutability)
-    //   } else {
-    //     // If item doesn't exist, add it with initial quantity 1
-    //     // state.total++;
-    //     return {
-    //       ...state,
-    //       cart: [
-    //         ...state.cart,
-    //         action.payload.hasOwnProperty('quantity')
-    //           ? {...action.payload}
-    //           : {
-    //               ...action.payload,
-    //               quantity: 1,
-    //               totalPrice: action.payload.price * 1,
-    //             },
-    //       ],
-    //     };
-    //   }
-    //   // AsyncStorage.setItem('cart', JSON.stringify(state.cart));
-    // },
-
+    
      addToCart: (state, action) => {
         // Find existing item with the same ID
         const existingItem = state.cart.find(
@@ -155,56 +121,19 @@ const CustomerSlice = createSlice({
         }
       },
 
-    //   const {cart} = state;
-    //   const {id, unit, quantity} = action.payload;
+   
+    deleteCustomer: (state, action) => {
+      const existingCustomer = state.customers.findIndex(
+        item => item.id === action.payload.id,
+      );
 
-    //   // Check if an item with the same ID and unit exists in the cart
-    //   const existingItemIndex = cart.findIndex(
-    //     item => item.id === id && item.unit === unit,
-    //   );
+     
 
-    //   if (existingItemIndex !== -1) {
-    //     // If item exists, update its quantity
-    //     state.cart[existingItemIndex].quantity += parseInt(quantity);
-    //     state.cart[existingItemIndex].totalPrice =
-    //       state.cart[existingItemIndex].price *
-    //       state.cart[existingItemIndex].quantity;
-    //   } else {
-    //     // If item doesn't exist, add it to the cart
-    //     const newItem = {
-    //       ...action.payload,
-    //       quantity: quantity ? quantity : 1,
-    //       totalPrice: action.payload.price * quantity,
-    //     };
-    //     state.cart.push(newItem);
-    //   }
-    // },
-
-    // removeFromCart: (state, action) => {
-    //   // Retrieve the ID of the item to remove from the action payload
-    //   const itemIdToRemove = action.payload;
-
-    //   // Find the index of the item in the data array
-    //   const itemIndex = state.cart.findIndex(
-    //     item => item.id === itemIdToRemove,
-    //   );
-    //   // Check if the item exists
-    //   if (itemIndex !== -1) {
-    //     // Immer provides a draft state for direct modification
-    //     // No need to create a copy of the Data array
-    //     if (state.cart[itemIndex].quantity > 1) {
-    //       state.cart[itemIndex].quantity--;
-    //       state.cart[itemIndex].totalPrice =
-    //         state.cart[itemIndex].price * state.cart[itemIndex].quantity; // Modify draft directly
-    //     } else {
-    //       state.cart.splice(itemIndex, 1); // Modify draft directly
-    //     }
-    //   }
-    //   // Immer handles returning the modified state
-    //   // AsyncStorage.setItem('cart', JSON.stringify(state.cart));
-    //   return; // No need to return anything explicitly
-    // },
-
+        console.log('deleting customer', existingCustomer);
+        state.customers.splice(existingCustomer, 1);
+        
+      
+    },
     removeFromCart: (state, action) => {
       const itemIdToRemove = action.payload;
       const itemIndex = state.cart.findIndex(
@@ -225,9 +154,7 @@ const CustomerSlice = createSlice({
     emptyCart: (state, action) => {
       state.cart = [];
     },
-    // customerToSend: (state, action) => {
-    //   state.cartCustomer = action.payload;
-    // },
+    
   },
 });
 export default CustomerSlice.reducer;
@@ -238,5 +165,6 @@ export const {
   addCustomer,
   emptyCart,
   toggleSignIn,
+  deleteCustomer,
   // customerToSend,
 } = CustomerSlice.actions;

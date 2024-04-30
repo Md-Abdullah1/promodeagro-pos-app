@@ -1,16 +1,15 @@
-
-
 import React, {useState} from 'react';
-import {TextInput, View, Text, ToastAndroid, Alert} from 'react-native';
+import {TextInput, View, Text, ToastAndroid, Alert, Pressable} from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {addCustomer} from '../../redux/slice/customerSlice';
 import {useDispatch} from 'react-redux';
 import {creatingCustomer} from '../../api/createCustomer';
-
+import {s} from 'react-native-wind';
+import styles from './styles';
 const Adduser = () => {
-  const [mobileNumber, setMobileNumber] = useState(""); // State to store the mobile number
-  const [mobileNumberEntered, setMobileNumberEntered] = useState(false); 
+  const [mobileNumber, setMobileNumber] = useState(''); // State to store the mobile number
+  const [mobileNumberEntered, setMobileNumberEntered] = useState(false);
   const [inputUser, setInputUser] = useState({
     name: '',
     phone: '',
@@ -31,33 +30,39 @@ const Adduser = () => {
       setInputUser({...inputUser, [name]: value});
     }
   };
-  
+
   // const routeName = navigation.getState().routes[0].name ;
   // console.log('route name',routeName)
   const total = route.params?.total;
   const items = route.params?.items;
-  console.log('router values',total,items)
+  console.log('router values', total, items);
 
   const handleSubmit = async () => {
-  if (mobileNumberEntered && inputUser.name.trim().length > 0) {
-    console.log('details', inputUser);
-    const CustomerCreated = await createCustomer(inputUser);
-    console.log('sending customer to redux', CustomerCreated);
-    dispatch(addCustomer(CustomerCreated));
-    navigation.navigate('Customers', { total: total, items: items });
-    setInputUser({ name: '', phone: '' });
-    setMobileNumber(''); // Resetting mobile number
-    setMobileNumberEntered(false); // Resetting mobile number entered flag
-  } else {
-    const errorMessage = 'Please ensure all fields are correctly filled. Name is required and Phone Number must be exactly 10 digits.';
-    if (Platform.OS === 'android') {
-      ToastAndroid.showWithGravityAndOffset(errorMessage, ToastAndroid.LONG, ToastAndroid.TOP, 25, 50);
+    if (mobileNumberEntered && inputUser.name.trim().length > 0) {
+      console.log('details', inputUser);
+      const CustomerCreated = await createCustomer(inputUser);
+      console.log('sending customer to redux', CustomerCreated);
+      dispatch(addCustomer(CustomerCreated));
+      navigation.navigate('Customers', {total: total, items: items});
+      setInputUser({name: '', phone: ''});
+      setMobileNumber(''); // Resetting mobile number
+      setMobileNumberEntered(false); // Resetting mobile number entered flag
     } else {
-      Alert.alert(errorMessage);
+      const errorMessage =
+        'Please ensure all fields are correctly filled. Name is required and Phone Number must be exactly 10 digits.';
+      if (Platform.OS === 'android') {
+        ToastAndroid.showWithGravityAndOffset(
+          errorMessage,
+          ToastAndroid.LONG,
+          ToastAndroid.TOP,
+          25,
+          50,
+        );
+      } else {
+        Alert.alert(errorMessage);
+      }
     }
-  }
-};
-
+  };
 
   const handleGoToAdduser = () => {
     navigation.goBack();
@@ -80,73 +85,104 @@ const Adduser = () => {
 
   return (
     <View>
-      <View style={{padding: 20}}>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: 20,
-          }}>
+      <View
+        style={[s`bg-blue-200 p-4 flex flex-row justify-between items-center`]}>
+        <View style={[s`flex flex-row  `]}>
           <AntDesign
-            name="close"
-            size={30}
-            color="#31572c"
+            name="arrowleft"
+            size={28}
+            color="#FC8019"
+            style={[s` flex justify-center items-center text-center m-0 p-0`]}
             onPress={handleGoToAdduser}
           />
-          <Text style={{fontSize: 20, color: 'blue'}} onPress={handleSubmit}>
-            Save
+          <Text style={[s`text-xl mx-2 `, styles.textPrimary]}>
+            Add new Customer
           </Text>
         </View>
-        <Text style={{fontSize: 25, marginBottom: 20, color: 'black'}}>
-          Add new Customer
-        </Text>
+        <View style={[s`flex flex-row items-center`]}>
+          <Text style={[s`text-lg font-medium mx-2`, styles.textBlack]}>
+            ID Number
+          </Text>
+          <TextInput
+            placeholder="#53453     ( Automatic ID Generators )"
+            placeholderTextColor="gray"
+            style={[s`p-2 py-1 w-64`, styles.input]}
+            // value={inputUser.name}
+            editable={false}
+          />
+        </View>
+      </View>
+      <View style={[s`bg-gray-600 w-full h-full flex  items-center `]}>
+        <View style={[s`flex bg-green-200  p-4 flex-row justify-between w-full`,styles.upper]}>
+          <View style={[s` p-2`,styles.leftPart]}>
+            <View style={[s``,styles.inputBoxFull]}>
+              <Text>Name*</Text>
+              <TextInput
+              placeholder="Name * (Required)"
+              placeholderTextColor="gray"
+              style={[s`mt-2 w-full`,styles.input]}
+              value={inputUser.name}
+              onChangeText={e => handleChange('name', e)}
+            />
+            </View>
+            <View style={[s``,styles.inputBoxFull]}>
+              <Text>Name*</Text>
+              <TextInput
+              placeholder="Name * (Required)"
+              placeholderTextColor="gray"
+              style={[s`mt-2`,styles.input]}
+              value={inputUser.name}
+              onChangeText={e => handleChange('name', e)}
+            />
+            </View>
+            <View style={[s``,styles.inputBoxFull]}>
+              <Text>Name*</Text>
+              <TextInput
+              placeholder="Name * (Required)"
+              placeholderTextColor="gray"
+              style={[s`mt-2`,styles.input]}
+              value={inputUser.name}
+              onChangeText={e => handleChange('name', e)}
+            />
+            </View>
+            
+          </View>
+          <View style={[s``,styles.rightPart]}>
+            <TextInput
+              placeholder="Name * (Required)"
+              placeholderTextColor="gray"
+              style={{
+                borderWidth: 1,
+                borderColor: 'black',
+                marginBottom: 20,
+                fontSize: 16,
+                padding: 15,
+                color: 'black',
+              }}
+              value={inputUser.name}
+              onChangeText={e => handleChange('name', e)}
+            />
 
-        <Text style={{fontSize: 15, color: 'gray', marginBottom: 10}}>
-          Contact Information{' '}
-        </Text>
-        <TextInput
-          placeholder="Name * (Required)"
-          placeholderTextColor="gray"
-          style={{
-            borderWidth: 1,
-            borderColor: 'black',
-            marginBottom: 20,
-            fontSize: 16,
-            padding: 15,
-            color: 'black',
-          }}
-          value={inputUser.name}
-          onChangeText={e => handleChange('name', e)}
-        />
-        {/* <TextInput
-          placeholder="Last Name"
-          placeholderTextColor="gray"
-          style={{
-            borderWidth: 1,
-            borderColor: 'black',
-            marginBottom: 20,
-            fontSize: 16,
-            padding: 15,
-          }}
-          value={inputUser.LastName}
-          onChangeText={text => handleChange('LastName', text)}
-        /> */}
-        <TextInput
-          placeholder="Phone Number"
-          placeholderTextColor="gray"
-          style={{
-            borderWidth: 1,
-            borderColor: 'black',
-            marginBottom: 20,
-            fontSize: 16,
-            padding: 15,
-            color: 'black',
-          }}
-          keyboardType="numeric"
-          value={inputUser.phone}
-          onChangeText={text => handleChange('phone', text)}
-        />
+            <TextInput
+              placeholder="Phone Number"
+              placeholderTextColor="gray"
+              style={{
+                borderWidth: 1,
+                borderColor: 'black',
+                marginBottom: 20,
+                fontSize: 16,
+                padding: 15,
+                color: 'black',
+              }}
+              keyboardType="numeric"
+              value={inputUser.phone}
+              onChangeText={text => handleChange('phone', text)}
+            />
+          </View>
+        </View>
+        <Pressable style={[s`w-32 rounded flex justify-center items-center m-2 mb-0 p-2 `,styles.bgPrimary ,styles.textWhite,styles.lower]} onPress={handleSubmit}>
+          <Text style={[s``,styles.textWhite]}>Save</Text>
+        </Pressable>
       </View>
     </View>
   );
