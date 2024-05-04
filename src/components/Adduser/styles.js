@@ -48,24 +48,34 @@ export default StyleSheet.create({
     borderRadius:3,
    },
    leftPart:{
-    width:'60%',
-    backgroundColor:'violet',
+    width:'65%',
+    
    },
    rightPart:{
-    width:'35%',
-    backgroundColor:'skyblue'
+    width:'30%',
+    // backgroundColor:'skyblue'
    },
    inputBoxFull:{
     flex:1,
     alignItems:'flex-start',
     justifyContent:'flex-start',
-    width:'90%',
+    width:'100%',
+    maxHeight:'15%',
    },
    inputBoxHalf:{
     flex:1,
-    alignItems:'flex-start',
-    justifyContent:'flex-start',
-    width:'45%',
+    // alignItems:'flex-start',
+    // justifyContent:'flex-start',
+    maxWidth:'40%',
+   },
+   inputBoxes:{
+    width:'100%',
+    maxHeight:'15%',
+    flex:1,
+    justifyContent:'space-between',
+    alignItems:'center',
+    flexDirection:'row',
+
    },
    lower:{
     height:'5%',
@@ -74,5 +84,15 @@ export default StyleSheet.create({
    upper:{
     height:"70%",
     width:'100%',
+   },
+   profile:{
+    maxHeight:'60%',
+
+
+   },
+   smallBox:{
+    width:'10%',
+
+
    }
 })
