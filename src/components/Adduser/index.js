@@ -10,6 +10,7 @@ import {
   Button,
   Image,
 } from 'react-native';
+import {Card, Modal} from '@ui-kitten/components';
 import {launchCamera} from 'react-native-image-picker';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -19,6 +20,7 @@ import {creatingCustomer} from '../../api/createCustomer';
 import {s} from 'react-native-wind';
 import profile from '../../public/Vector.jpg';
 import profile2 from '../../public/female.jpg';
+import success from '../../public/success.jpg';
 import styles from './styles';
 const Adduser = () => {
   const [mobileNumber, setMobileNumber] = useState(''); // State to store the mobile number
@@ -34,7 +36,8 @@ const Adduser = () => {
   });
   const [gender, setGender] = useState('');
   const [imageUri, setImageUri] = useState(null);
-  console.log(`from values `,userData)
+  const [visible, setVisible] = React.useState(false);
+  console.log(`from values `, userData);
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const route = useRoute();
@@ -65,30 +68,31 @@ const Adduser = () => {
   console.log('router values', total, items);
 
   const handleSubmit = async () => {
-    if (mobileNumberEntered && inputUser.name.trim().length > 0) {
-      console.log('details', inputUser);
-      const CustomerCreated = await createCustomer(inputUser);
-      console.log('sending customer to redux', CustomerCreated);
-      dispatch(addCustomer(CustomerCreated));
-      navigation.navigate('Customers', {total: total, items: items});
-      setInputUser({name: '', phone: ''});
-      setMobileNumber(''); // Resetting mobile number
-      setMobileNumberEntered(false); // Resetting mobile number entered flag
-    } else {
-      const errorMessage =
-        'Please ensure all fields are correctly filled. Name is required and Phone Number must be exactly 10 digits.';
-      if (Platform.OS === 'android') {
-        ToastAndroid.showWithGravityAndOffset(
-          errorMessage,
-          ToastAndroid.LONG,
-          ToastAndroid.TOP,
-          25,
-          50,
-        );
-      } else {
-        Alert.alert(errorMessage);
-      }
-    }
+    setVisible(true);
+    // if (mobileNumberEntered && inputUser.name.trim().length > 0) {
+    //   console.log('details', inputUser);
+    //   const CustomerCreated = await createCustomer(inputUser);
+    //   console.log('sending customer to redux', CustomerCreated);
+    //   dispatch(addCustomer(CustomerCreated));
+    //   navigation.navigate('Customers', {total: total, items: items});
+    //   setInputUser({name: '', phone: ''});
+    //   setMobileNumber(''); // Resetting mobile number
+    //   setMobileNumberEntered(false); // Resetting mobile number entered flag
+    // } else {
+    //   const errorMessage =
+    //     'Please ensure all fields are correctly filled. Name is required and Phone Number must be exactly 10 digits.';
+    //   if (Platform.OS === 'android') {
+    //     ToastAndroid.showWithGravityAndOffset(
+    //       errorMessage,
+    //       ToastAndroid.LONG,
+    //       ToastAndroid.TOP,
+    //       25,
+    //       50,
+    //     );
+    //   } else {
+    //     Alert.alert(errorMessage);
+    //   }
+    // }
   };
 
   const handleGoToAdduser = () => {
@@ -149,7 +153,7 @@ const Adduser = () => {
   };
   console.log(`image uri ${imageUri}`);
   return (
-    <View>
+    <View style={[s`w-full  relative`]}>
       <View
         style={[
           s` p-4 flex flex-row justify-between items-center`,
@@ -161,7 +165,7 @@ const Adduser = () => {
             size={28}
             color="#FC8019"
             style={[s` flex justify-center items-center text-center m-0 p-0`]}
-            onPress={handleGoToAdduser}
+            onPress={() => navigation.goBack()}
           />
           <Text style={[s`text-xl mx-2 `, styles.textPrimary]}>
             Add new Customer
@@ -201,7 +205,7 @@ const Adduser = () => {
                   placeholderTextColor="gray"
                   style={[s`mt-2 p-1 `, styles.input]}
                   value={userData.phone}
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                   onChangeText={e => handleChange('phone', e)}
                 />
               </View>
@@ -325,7 +329,7 @@ const Adduser = () => {
                   placeholderTextColor="gray"
                   style={[s`mt-2 p-1 `, styles.input]}
                   value={userData.pincode}
-                  keyboardType='numeric'
+                  keyboardType="numeric"
                   onChangeText={e => handleChange('pincode', e)}
                 />
               </View>
@@ -334,7 +338,10 @@ const Adduser = () => {
           <View style={[s`p-2 flex `, styles.rightPart]}>
             <Pressable
               onPress={selectImage}
-              style={[s` rounded-2xl`, styles.profile]}>
+              style={[
+                s` rounded-2xl border border-gray-200 p-4`,
+                styles.profile,
+              ]}>
               {imageUri ? (
                 <Image
                   source={{uri: imageUri}}
@@ -350,10 +357,16 @@ const Adduser = () => {
               {/* <Button title="Select Image" onPress={selectImage} /> */}
             </Pressable>
             <View style={[s`flex flex-row `]}>
-              <View style={[s`w-12 h-12 bg-blue-700 mr-2 my-4 rounded-lg`]}>
+              <View
+                style={[
+                  s`w-12 h-12 border border-gray-200 p-1 mr-2 my-4 rounded-lg`,
+                ]}>
                 <Image source={profile} style={[s`w-full h-full rounded-lg`]} />
               </View>
-              <View style={[s`w-12 h-12 bg-blue-700 mr-2 my-4 rounded-lg`]}>
+              <View
+                style={[
+                  s`w-12 h-12 border border-gray-200 p-1 mr-2 my-4 rounded-lg`,
+                ]}>
                 <Image
                   source={profile2}
                   style={[s`w-full h-full rounded-lg`]}
@@ -372,6 +385,52 @@ const Adduser = () => {
           onPress={handleSubmit}>
           <Text style={[s``, styles.textWhite]}>Save</Text>
         </Pressable>
+        <Modal
+          visible={visible}
+          backdropStyle={styles.backdrop}
+          onBackdropPress={() => setVisible(false)}
+          style={[
+            s`absolute rounded-2xl flex justify-between p-3`,
+            styles.modal,
+            styles.bgPureWhite,
+          ]}>
+          <View style={[s` m-3 flex items-center p-2`,]}>
+            <Image source={success} style={[s`w-14 h-12 rounded-2xl`]} />
+            <Text style={[s`font-semibold text-lg m-2`, styles.textPrimary]}>
+              Success!
+            </Text>
+            <Text style={[s`m-2`, styles.textBlack]}>
+              New Customer Added Sucessfully
+            </Text>
+          </View>
+
+          <View
+            style={[s`flex flex-row items-center justify-between w-fit p-2`]}>
+            <Pressable
+              onPress={() => {
+                navigation.goBack();
+                setVisible(false);
+              }}
+              style={[
+                s`w-32 rounded flex justify-center items-center mx-2 mb-0 p-2 `,
+                styles.borderButton,
+              ]}>
+              <Text style={[styles.textPrimary]}>Go Back</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('HomePage');
+                setVisible(false);
+              }}
+              style={[
+                s`w-32 rounded flex justify-center items-center mb-0 p-2 `,
+                styles.bgPrimary,
+                styles.textWhite,
+              ]}>
+              <Text style={[styles.textWhite]}>Go Back</Text>
+            </Pressable>
+          </View>
+        </Modal>
       </View>
     </View>
   );
