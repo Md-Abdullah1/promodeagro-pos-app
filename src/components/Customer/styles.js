@@ -78,5 +78,17 @@ export default StyleSheet.create({
       borderBottomColor:'#9F9F9E',
       // borderWidth:1,
     },
+    backdrop: {
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    },
+    modal:{
+      width:'35%',
+      height:'35%',
+      
+    },
+    borderButton:{
+      borderColor:'#FC8019',
+      borderWidth:1,
+    }
   
 })

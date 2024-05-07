@@ -9,30 +9,35 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
-  Modal,
+  Image
 } from 'react-native';
+import success from '../../public/success.jpg';
+
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Menu, MenuItem,Icon as UIcon} from '@ui-kitten/components';
+import {Menu, Modal, MenuItem, Icon as UIcon} from '@ui-kitten/components';
 import {
   useNavigation,
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
+import deleteImg from '../../public/delete.jpg'
 import {useDispatch, useSelector} from 'react-redux';
 import {s} from 'react-native-wind';
 import styles from './styles';
-import { deleteCustomer } from '../../redux/slice/customerSlice';
+import {deleteCustomer} from '../../redux/slice/customerSlice';
 const Customers = () => {
   const data = useSelector(state => state.CustomerSlice.customers);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [ShowAlert, setShowAlert] = React.useState(false);
 
   const navigation = useNavigation();
   const route = useRoute();
-  const dispatch =  useDispatch()
+  const dispatch = useDispatch();
   console.log('customers', data);
 
   const filterCustomers = (customers, query) => {
@@ -61,7 +66,7 @@ const Customers = () => {
       setFilteredCustomers(data);
     }
   };
- 
+
   const total = route.params?.total;
   const items = route.params?.items;
   const OrderData = route.params?.data;
@@ -124,12 +129,12 @@ const Customers = () => {
       console.log('View order history for customer:', customer);
     } else if (action === 'Edit') {
       console.log('navigating to Edit customer:', customer);
-     navigation.navigate('Adduser', {customer:customer});
+      navigation.navigate('Adduser', {customer: customer});
     } else if (action === 'Delete') {
-      
+      setShowAlert(true)
       console.log('Deleting  customer:', customer);
       // delete api of customer
-      dispatch(deleteCustomer(customer))
+      dispatch(deleteCustomer(customer));
     }
   };
 
@@ -186,6 +191,88 @@ const Customers = () => {
         </View>
       </View>
       <ScrollView style={[s`bg-white  m-1 mt-20 p-1`, styles.table]}>
+        <Modal
+          visible={ShowAlert}
+          backdropStyle={styles.backdrop}
+          onBackdropPress={() => setVisible(false)}
+          style={[
+            s`absolute rounded-2xl flex justify-between p-3`,
+            styles.modal,
+            styles.bgPureWhite,
+          ]}>
+          <View style={[s` m-3 flex items-center p-2`]}>
+            <Image source={deleteImg} style={[s`w-14 h-12 rounded-2xl`]} />
+            <Text style={[s`font-semibold text-lg m-2`, styles.textSecondary]}>
+              Delete!
+            </Text>
+            <Text style={[s`m-2`, styles.textBlack]}>
+              Do you want to delete the Customer 
+            </Text>
+          </View>
+
+          <View
+            style={[s`flex flex-row items-center justify-between w-fit p-2`]}>
+            <Pressable
+              onPress={() => {
+                // navigation.goBack();
+                // setVisible(false);
+                setShowAlert(false)
+              }}
+              style={[
+                s`w-32 rounded flex justify-center items-center mx-2 mb-0 p-2 `,
+                styles.borderButton,
+              ]}>
+              <Text style={[styles.textPrimary]}>Go Back</Text>
+            </Pressable>
+            <Pressable
+              onPress={() => {
+                setVisible(true)
+                // navigation.navigate('Customer');
+                setShowAlert(false);
+              }}
+              style={[
+                s`w-32 rounded flex justify-center items-center mb-0 p-2 `,
+                styles.bgPrimary,
+                styles.textWhite,
+              ]}>
+              <Text style={[styles.textWhite]}>Sure</Text>
+            </Pressable>
+          </View>
+        </Modal>
+        <Modal
+          visible={visible}
+          backdropStyle={styles.backdrop}
+          onBackdropPress={() => setVisible(false)}
+          style={[
+            s`absolute rounded-2xl flex justify-between items-center p-3`,
+            styles.modal,
+            styles.bgPureWhite,
+          ]}>
+          <View style={[s` m-3 flex items-center p-2`]}>
+            <Image source={success} style={[s`w-14 h-12 rounded-2xl`]} />
+            <Text style={[s`font-semibold text-lg m-2`, styles.textPrimary]}>
+              Success!
+            </Text>
+            <Text style={[s`m-2`, styles.textBlack]}>
+             Customer Data Deleted Sucessfully
+            </Text>
+          </View>
+
+          
+            <Pressable
+              onPress={() => {
+                // navigation.goBack();
+                setVisible(false);
+              }}
+              style={[
+                s` rounded flex justify-center items-center mx-2 mb-0 p-2 `,
+                styles.borderButton,
+              ]}>
+              <Text style={[styles.textPrimary]}>Go To Customer Page</Text>
+            </Pressable>
+             
+          
+        </Modal>
         <View
           style={[s`flex flex-row justify-between p-1 m-1 `, styles.bgWhite]}>
           <Text
@@ -210,66 +297,70 @@ const Customers = () => {
         </View>
         {filteredCustomers &&
           filteredCustomers.map((customer, i) => {
-            
-
-              return (
-                <View
+            return (
+              <View
+                style={[
+                  s` flex flex-row justify-between px-1 rounded-lg py-1 relative z-10`,
+                  i % 2 == 0 ? styles.bgPureWhite : styles.bgWhite,
+                ]}
+                key={i}>
+                <Text
                   style={[
-                    s` flex flex-row justify-between px-1 rounded-lg py-1 relative z-10`,(i%2 == 0) ? (styles.bgPureWhite): (styles.bgWhite)]}
-                  key={i}>
-                  <Text
+                    s`text-lg p-1  w-fit h-fit text-center text-black  m-1`,
+                    ,
+                  ]}>
+                  {customer.id}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                  {customer.name}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black  m-1`]}>Email</Text>
+                <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                  {customer.phone}
+                </Text>
+                <Text style={[s`text-lg p-1 text-black  m-1`]}>Added on</Text>
+                <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                  Last Purchase Item
+                </Text>
+                <Pressable
+                  style={[s`text-lg p-1 text-black  m-1`]}
+                  onPress={() => handleItemPress(customer)}>
+                  {
+                    <MaterialCommunityIcons
+                      name="dots-horizontal"
+                      size={18}
+                      color="#000"
+                    />
+                  }
+                </Pressable>
+                {selectedCustomer && selectedCustomer.id === customer.id && (
+                  <View
                     style={[
-                      s`text-lg p-1  w-fit h-fit text-center text-black  m-1`,
-                      ,
+                      s` flex items-center w-24 h-20  z-30 right-0 absolute `,
+                      styles.menu,
+                      styles.bgPureWhite,
                     ]}>
-                    {customer.id}
-                  </Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
-                    {customer.name}
-                  </Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Email</Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
-                    {customer.phone}
-                  </Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Added on</Text>
-                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
-                    Last Purchase Item
-                  </Text>
-                  <Pressable
-                    style={[s`text-lg p-1 text-black  m-1`]}
-                    onPress={() => handleItemPress(customer)}>
-                    {
-                      <MaterialCommunityIcons
-                        name="dots-horizontal"
-                        size={18}
-                        color="#000"
-                      />
-                    }
-                  </Pressable>
-                  {selectedCustomer && selectedCustomer.id === customer.id && (
-                    <View style={[s` flex items-center w-24 h-20  z-30 right-0 absolute `,styles.menu,styles.bgPureWhite]}>
-                      <Pressable style={[s`  z-20`,styles.menuItem ,styles.textBlack]}
-                      onPress={() => handleActionSelect('Order History', customer)}>
-                        <Text>Order History</Text>
-                      </Pressable>
-                      <Pressable style={[s` z-20`,styles.menuItem ,styles.textBlack]}
+                    <Pressable
+                      style={[s`  z-20`, styles.menuItem, styles.textBlack]}
+                      onPress={() =>
+                        handleActionSelect('Order History', customer)
+                      }>
+                      <Text>Order History</Text>
+                    </Pressable>
+                    <Pressable
+                      style={[s` z-20`, styles.menuItem, styles.textBlack]}
                       onPress={() => handleActionSelect('Edit', customer)}>
-                        <Text>Edit</Text>
-                      </Pressable>
-                      <Pressable style={[s`  z-20`,styles.menuItem ,styles.textBlack]}
+                      <Text>Edit</Text>
+                    </Pressable>
+                    <Pressable
+                      style={[s`  z-20`, styles.menuItem, styles.textBlack]}
                       onPress={() => handleActionSelect('Delete', customer)}>
-                        <Text>Delete</Text>
-                      </Pressable>
-                    </View>
-                    
-                    
-                      
-                    
-                   
-                  )}
-                </View>
-              );
-           
+                      <Text>Delete</Text>
+                    </Pressable>
+                  </View>
+                )}
+              </View>
+            );
           })}
       </ScrollView>
     </View>
