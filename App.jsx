@@ -18,6 +18,7 @@ import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
   import Checkout from './src/components/Checkout';
   import Cash from './src/components/Cash/index.js';
   import Customers from './src/components/Customer';
+  import CustomerInfo from './src/components/CustomerInfo/index.js';
   import Share from './src/components/Share/index.js'
   // import Settings from './src/components/Setting';
   // import Settings from './src/components/setting/index.js';
@@ -61,6 +62,7 @@ import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
         headerShown: false,
       }}>
       <Stack.Screen name="Settings" component={Settings} />
+      <Stack.Screen name="CustomerInfo" component={CustomerInfo} />
       <Stack.Screen name="Customers" component={Customers} />
       <Stack.Screen name="PrintToA4" component={PrintToA4} />
       {/* <Stack.Screen name="productPrinter" component={productPrinter} /> */}
@@ -136,6 +138,7 @@ import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
       {/* { !isSignedIn && <Stack.Screen name="Signin" component={Signin} />}
       { !isSignedIn && <Stack.Screen name="Signup" component={Signup} />}
       { !isSignedIn && <Stack.Screen name="Otp" component={Otp} />} */}
+      {/* <Stack.Screen name="CustomerInfo" component={CustomerInfo} /> */}
         <Stack.Screen name="HomePage" component={Home} />
         <Stack.Screen name="Adduser" component={Adduser} />
         <Stack.Screen name="Cash" component={Cash} />

@@ -126,7 +126,8 @@ const Customers = () => {
     setShowModal(false); // Close the options modal
     if (action === 'Order History') {
       //  Order History action
-      console.log('View order history for customer:', customer);
+      console.log('navigating to View order history for customer:', customer);
+      navigation.navigate('CustomerInfo',{customer:customer})
     } else if (action === 'Edit') {
       console.log('navigating to Edit customer:', customer);
       navigation.navigate('Adduser', {customer: customer});
