@@ -349,7 +349,7 @@ const Adduser = () => {
                 />
               ) : (
                 <Image
-                  source={profile}
+                  source={profile2}
                   style={[s`w-full h-full rounded-2xl`]}
                 />
               )}

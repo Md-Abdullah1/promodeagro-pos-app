@@ -41,19 +41,33 @@ export default StyleSheet.create({
     bgPureWhite: {
       backgroundColor: '#FFFFFF',
     },
+    searchBar:{
+      width:'65%',
+      // height:'100%',
+      
+    },
+    searchBarFocused: {
+      // Change the border color when input is focused
+      borderColor:'#9F9F9E',
+      borderWidth: 1, // You can adjust the border width as needed
+    },
    input:{
     borderWidth: 0.3,
     borderColor: '#171826',
     color: '#171826',
     borderRadius:3,
    },
-   leftPart:{
-    width:'65%',
-    
+   container:{
+    width:'100%',
+    height:'100%',
    },
-   rightPart:{
-    width:'30%',
-    // backgroundColor:'skyblue'
+   leftPart:{
+    width:'60%',
+    height:'100%' 
+  },
+  rightPart:{
+    width:'35%',
+    height:'100%' 
    },
    inputBoxFull:{
     flex:1,
@@ -78,17 +92,15 @@ export default StyleSheet.create({
 
    },
    lower:{
-    height:'5%',
-    // width:'100%'
-   },
-   upper:{
-    height:"70%",
-    width:'100%',
+     height:"82%",
+     width:'100%',
+    },
+    upper:{
+     height:'10%',
+     width:'100%'
    },
    profile:{
-    maxHeight:'60%',
-
-
+    width:'30%',
    },
    smallBox:{
     width:'10%',
