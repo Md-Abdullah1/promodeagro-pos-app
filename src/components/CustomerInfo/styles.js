@@ -91,8 +91,12 @@ export default StyleSheet.create({
     flexDirection:'row',
 
    },
+   lowerButtons:{
+    width:'100%',
+    // backgroundColor:'blue'
+   },
    lower:{
-     height:"82%",
+     height:"85%",
      width:'100%',
     },
     upper:{
@@ -118,5 +122,13 @@ export default StyleSheet.create({
   borderButton:{
     borderColor:'#FC8019',
     borderWidth:1,
+  },
+  purchaseList:{
+    height:'64%',
+    // backgroundColor:'red'
+  },
+  listView:{
+    minHeight:'80%',
+    // backgroundColor:'blue'
   }
 })
