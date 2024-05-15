@@ -9,7 +9,7 @@ import {
   Pressable,
   ActivityIndicator,
   ScrollView,
-  Image
+  Image,
 } from 'react-native';
 import success from '../../public/success.jpg';
 
@@ -21,7 +21,7 @@ import {
   useRoute,
   useFocusEffect,
 } from '@react-navigation/native';
-import deleteImg from '../../public/delete.jpg'
+import deleteImg from '../../public/delete.jpg';
 import {useDispatch, useSelector} from 'react-redux';
 import {s} from 'react-native-wind';
 import styles from './styles';
@@ -127,12 +127,12 @@ const Customers = () => {
     if (action === 'Order History') {
       //  Order History action
       console.log('navigating to View order history for customer:', customer);
-      navigation.navigate('CustomerInfo',{customer:customer})
+      navigation.navigate('CustomerInfo', {customer: customer});
     } else if (action === 'Edit') {
       console.log('navigating to Edit customer:', customer);
       navigation.navigate('Adduser', {customer: customer});
     } else if (action === 'Delete') {
-      setShowAlert(true)
+      setShowAlert(true);
       console.log('Deleting  customer:', customer);
       // delete api of customer
       dispatch(deleteCustomer(customer));
@@ -207,7 +207,7 @@ const Customers = () => {
               Delete!
             </Text>
             <Text style={[s`m-2`, styles.textBlack]}>
-              Do you want to delete the Customer 
+              Do you want to delete the Customer
             </Text>
           </View>
 
@@ -217,7 +217,7 @@ const Customers = () => {
               onPress={() => {
                 // navigation.goBack();
                 // setVisible(false);
-                setShowAlert(false)
+                setShowAlert(false);
               }}
               style={[
                 s`w-32 rounded flex justify-center items-center mx-2 mb-0 p-2 `,
@@ -227,7 +227,7 @@ const Customers = () => {
             </Pressable>
             <Pressable
               onPress={() => {
-                setVisible(true)
+                setVisible(true);
                 // navigation.navigate('Customer');
                 setShowAlert(false);
               }}
@@ -255,24 +255,21 @@ const Customers = () => {
               Success!
             </Text>
             <Text style={[s`m-2`, styles.textBlack]}>
-             Customer Data Deleted Sucessfully
+              Customer Data Deleted Sucessfully
             </Text>
           </View>
 
-          
-            <Pressable
-              onPress={() => {
-                // navigation.goBack();
-                setVisible(false);
-              }}
-              style={[
-                s` rounded flex justify-center items-center mx-2 mb-0 p-2 `,
-                styles.borderButton,
-              ]}>
-              <Text style={[styles.textPrimary]}>Go To Customer Page</Text>
-            </Pressable>
-             
-          
+          <Pressable
+            onPress={() => {
+              // navigation.goBack();
+              setVisible(false);
+            }}
+            style={[
+              s` rounded flex justify-center items-center mx-2 mb-0 p-2 `,
+              styles.borderButton,
+            ]}>
+            <Text style={[styles.textPrimary]}>Go To Customer Page</Text>
+          </Pressable>
         </Modal>
         <View
           style={[s`flex flex-row justify-between p-1 m-1 `, styles.bgWhite]}>
