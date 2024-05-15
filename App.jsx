@@ -76,12 +76,12 @@ import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
       <Stack.Screen name="Order" component={Order} />
     </Stack.Navigator>
   );
-
+  
   const ProductsScreen = () => (
     <Stack.Navigator
-      screenOptions={{
-        headerShown: true,
-      }}>
+    screenOptions={{
+      headerShown: true,
+    }}>
       <Stack.Screen name="ProductsPage" component={Products} />
       <Stack.Screen name="Categorys" component={ProductPage} />
       <Stack.Screen name="UpdateProducts" component={UpdateProducts} />
@@ -92,7 +92,7 @@ import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
       <Stack.Screen name="ProductsList" component={ProductsList} />
     </Stack.Navigator>
   );
-
+  
   const screenOptions = ({ route }) => ({
     tabBarHideOnKeyboard: true,
     tabBarIcon: ({ color, size }) => {
@@ -101,44 +101,45 @@ import { ApplicationProvider, Layout, Text } from '@ui-kitten/components';
         case 'Home':
           iconName = 'home-outline';
           break;
-        case 'Setting':
-          iconName = 'settings-outline';
-          break;
-        case 'Products':
-          iconName = 'cube-outline';
-          break;
-        case 'Orders':
-          iconName = 'cart-outline'; 
-          break;
-        default:
-          iconName = 'alert-circle-outline';
-          
-      }
-      // Use the iconName determined by the switch statement
-      return <Ionicons name={iconName} size={size} color={color} />;
-    },
-  tabBarActiveTintColor: 'blue'
-
-  });
-
-
-  const App = () => {
-    // const [isSignedIn, setIsSignedIn] = useState(false);
-    const isSignedIn = useSelector(state => state.CustomerSlice.isSignedIn);
-
-    
-    // function changeSignIn(value){
-    //   setIsSignedIn(value);
-    // }
-    const HomeScreen = () => (
-      <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
+          case 'Setting':
+            iconName = 'settings-outline';
+            break;
+            case 'Products':
+              iconName = 'cube-outline';
+              break;
+              case 'Orders':
+                iconName = 'cart-outline'; 
+                break;
+                default:
+                  iconName = 'alert-circle-outline';
+                  
+                }
+                // Use the iconName determined by the switch statement
+                return <Ionicons name={iconName} size={size} color={color} />;
+              },
+              tabBarActiveTintColor: 'blue'
+              
+            });
+            
+            
+            const App = () => {
+              // const [isSignedIn, setIsSignedIn] = useState(false);
+              const isSignedIn = useSelector(state => state.CustomerSlice.isSignedIn);
+              
+              
+              // function changeSignIn(value){
+                //   setIsSignedIn(value);
+                // }
+                const HomeScreen = () => (
+                  <Stack.Navigator
+                  screenOptions={{
+                    headerShown: false,
+                  }}>
       {/* { !isSignedIn && <Stack.Screen name="Signin" component={Signin} />}
       { !isSignedIn && <Stack.Screen name="Signup" component={Signup} />}
-      { !isSignedIn && <Stack.Screen name="Otp" component={Otp} />} */}
+    { !isSignedIn && <Stack.Screen name="Otp" component={Otp} />} */}
       {/* <Stack.Screen name="CustomerInfo" component={CustomerInfo} /> */}
+    {/* <Stack.Screen name="OrdersPage" component={Orders} /> */}
         <Stack.Screen name="HomePage" component={Home} />
         <Stack.Screen name="Adduser" component={Adduser} />
         <Stack.Screen name="Cash" component={Cash} />

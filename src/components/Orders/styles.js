@@ -5,7 +5,7 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     flexWrap: "wrap",
-    gap: 2,
+    // gap: 2,
     padding: 4,
     flexDirection: "row",
     // justifyContent: "center",
@@ -13,23 +13,23 @@ export default StyleSheet.create({
     // overflow: "scroll",
   },
   shadow: {
-    shadowColor: "#ddd",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    // elevation: 1,
+    shadowColor: '#000', // Shadow color
+  shadowOffset: { width: 0, height: 2 }, // Offset of the shadow
+  shadowOpacity: 0.25, // Opacity of the shadow
+  shadowRadius: 3.84, // Radius of the shadow
+  elevation: 5,
   },
   scrollbar: {
     width: "100%",
     height: "80%",
     paddingVertical: "10px",
-    gap: 10,
+    // gap: 10,
   },
   scrollLeft: {
     width: "100%",
     height: "100%",
     paddingVertical: "10px",
-    gap: 10,
+    // gap: 10,
     flex: 1,
     flexDirection: "row",
     justifyContent: "",
@@ -40,7 +40,7 @@ export default StyleSheet.create({
 
   box: {
     padding: 10,
-    gap: 10,
+    // gap: 10,
   },
   bgDark: {
     backgroundColor: "#31572c",
@@ -83,7 +83,7 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
   },
   gap: {
-    gap: 10,
+    // gap: 10,
   },
   arrowbox: {
     flex: 1,
@@ -94,7 +94,7 @@ export default StyleSheet.create({
   status: {
     flex: 1,
     flexDirection: "row",
-    gap: 10,
+    // gap: 10,
     justifyContent: "flex-start",
     alignItems: "center",
     flexWrap: "wrap",
@@ -111,7 +111,7 @@ export default StyleSheet.create({
     height: "40%",
     padding: 8,
     paddingVertical: 8,
-    gap: 10,
+    // gap: 10,
   },
   statusbar:{
     flexDirection: "row",
@@ -125,7 +125,97 @@ export default StyleSheet.create({
     // height: "40%",
     padding: 8,
     paddingVertical: 8,
-    gap: 10,
+    // gap: 10,
 
+  },
+  textPrimary: {
+    color: '#FC8019',
+  },
+  bgPrimary: {
+    backgroundColor: '#FC8019',
+  },
+  textSecondary: {
+    color: '#09AA29',
+  },
+  bgSecondary: {
+    backgroundColor: '#09AA29',
+  },
+  textTertiary: {
+    color: '#FFF2E8',
+  },
+  bgTertiary: {
+    backgroundColor: '#FFF2E8',
+  },
+  textBlack: {
+    color: '#171826',
+  },
+  bgBlack: {
+    backgroundColor: '#171826',
+  },
+  textGrey: {
+    color: '#9F9F9E',
+  },
+  bgGrey: {
+    backgroundColor: '#9F9F9E',
+  },
+  textWhite: {
+    color: '#F5F5F5',
+  },
+  bgWhite: {
+    backgroundColor: '#F5F5F5',
+  },
+  bgPureWhite: {
+    backgroundColor: '#FFFFFF',
+  },
+  header:{
+    height:'10%',
+    width:'100%',
+    position: 'absolute',
+     top: 0,
+      left: 0,
+       right: 0 ,
+  },
+  headerRight:{
+    width:'50%',
+  },
+  searchBar:{
+    width:'65%',
+    // height:'100%',
+    borderColor:'#9F9F9E',
+    
+  },
+
+  table:{
+    width:'100%',
+    overflow:'scroll',
+  },
+  menu:{
+    position:'absolute',
+    right:0,
+    top:0,
+    shadowColor:'#000',
+    shadowOffset: { width: 2, height: 4 }, 
+    shadowOpacity: 0.50, 
+    shadowRadius: 3.84, 
+    elevation: 5,
+  },
+  menuItem: {
+    flexDirection: 'row', 
+    borderBottomColor:'#9F9F9E',
+    // borderWidth:1,
+  },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modal:{
+    width:'35%',
+    height:'35%',
+    
+  },
+  borderButton:{
+    borderColor:'#FC8019',
+    borderWidth:1,
+    backgroundColor:'#FFF2E8',
   }
+
 });
