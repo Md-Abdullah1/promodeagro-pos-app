@@ -57,14 +57,7 @@ export default StyleSheet.create({
   dark: {
     color: "#31572c",
   },
-  header: {
-    width: "100%",
-    height: "50%",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-  },
+ 
   boldText: {
     fontSize: 20,
     fontWeight: "bold",
@@ -170,10 +163,7 @@ export default StyleSheet.create({
   header:{
     height:'10%',
     width:'100%',
-    position: 'absolute',
-     top: 0,
-      left: 0,
-       right: 0 ,
+    
   },
   headerRight:{
     width:'50%',

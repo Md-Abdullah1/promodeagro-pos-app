@@ -24,12 +24,12 @@ const Orders = () => {
     console.log('after order value ', order);
   };
   const [ordersType, setOrdersType] = useState('Order History');
-
+  console.log(`orders type: ${ordersType}`);
   return (
-    <View>
+    <View style={[s`w-full h-full bg-blue-400 p-0 m-0  `]}>
       <View
         style={[
-          s` flex  flex-row px-6 p-1 items-center  mt-1   z-10 rounded-lg `,
+          s` flex  flex-row px-6 p-1 items-center  mb-1   z-10 rounded-lg `,
           styles.header,
           styles.bgPureWhite,
           styles.shadow,
@@ -64,73 +64,74 @@ const Orders = () => {
           </Text>
         </Pressable>
       </View>
-      {/* <View>
-        <Text style={[s``, styles.textBlack]}>hi{ordersType}</Text>
-      </View> */}
-      <ScrollView style={[styles.scrollbar]}>
-        {console.log('in scrool')}
+      <View style={[s`my-1 py-1 bg-blue-100`]}>
+        <Text style={[s`text-xl  font-medium`, styles.textBlack]}>
+          {ordersType}
+        </Text>
+      </View>
+      <View>
+        <View style={[s`bg-white  m-1  p-1`, styles.table]}>
+          <View
+            style={[s`flex flex-row justify-between px-3 p-1 m-1 `, styles.bgWhite]}>
+            <Text
+              style={[
+                s`text-lg p-1 w-fit h-fit text-center `,
+                styles.textPrimary,
+              ]}>
+              S.No
+            </Text>
+            <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Name</Text>
+            <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Order ID</Text>
 
-        {fetchedOrders.length > 0 ? (
-          fetchedOrders.map((order, index) => {
-            return (
-              <Pressable
-                style={[styles.box, styles.shadow]}
-                key={index}
-                onPress={() => handleOrder(order)}>
-                <View style={[{flex: 1}, styles.gap]}>
-                  <Text style={{fontWeight: 500, fontSize: 16, color: 'gray'}}>
-                    {order.createdAt ? order.createdAt.slice(0, 10) : ''}
+            <Text style={[s`text-lg p-1  `, styles.textPrimary]}>
+              Date & Time
+            </Text>
+            <Text style={[s`text-lg p-1  `, styles.textPrimary]}>
+              Total Amount
+            </Text>
+            <Text style={[s`text-lg p-1  `, styles.textPrimary]}>Status</Text>
+          </View>
+          {fetchedOrders &&
+            fetchedOrders.map((order, i) => {
+              return (
+                <ScrollView
+                  style={[
+                    s` flex flex-row justify-between px-3 rounded-lg py-1 relative z-10`,
+                    i % 2 == 0 ? styles.bgPureWhite : styles.bgWhite,
+                  ]}
+                  key={i}>
+                  <Text
+                    style={[
+                      s`text-lg p-1  text-black bg-black  m-1`,
+                      ,
+                    ]}>
+                    {i+1}
                   </Text>
-                  <View style={[styles.border]}></View>
-                  <View style={[styles.gap]}>
-                    <Text style={{fontSize: 16, color: 'black'}}>
-                      #{order.id}{' '}
-                    </Text>
-                    <Text
-                      style={{
-                        fontSize: 18,
-                        color: '#31572c',
-                        flex: 1,
-                        fontWeight: '700',
-                      }}>
-                      <FontAwesome
-                        name="rupee"
-                        size={18}
-                        color="#31572c"
-                        style={{marginRight: 5, marginLeft: 5}}
-                      />
-                      {order.totalPrice}
-                      {'   '}
-                      orderd price
-                    </Text>
-                  </View>
-                  <View style={[styles.arrowbox, {margin: 5}]}>
-                    {/* <Text>No Customer </Text> */}
-                    <Text></Text>
-                    <FontAwesome5 name="angle-right" size={26} color="black" />
-                  </View>
-                </View>
-                <View style={[styles.status]}>
-                  <View style={[styles.statusbar]}>
-                    <FontAwesome name="circle" size={18} color="#31572c" />
-                    <Text style={{marginLeft: 5, color: 'black'}}>
-                      {order.status}
-                    </Text>
-                  </View>
-
-                  {/* <View style={[styles.statusbar]}>
-                    <FontAwesome name="circle" size={18} color="#31572c" />
-                    <Text style={{marginLeft: 5}}>Fulfilled</Text>
-                  </View> */}
-                </View>
-              </Pressable>
-            );
-          })
-        ) : (
-          <ActivityIndicator size="large" color="#31572c" />
-        )}
-        {console.log('scrool ended')}
-      </ScrollView>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    {order?.name}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>Email</Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                    {order?.id}
+                  </Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>{order.createdAt ? order.createdAt.slice(0, 10) : ''}</Text>
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                   {order?.totalPrice}
+                  </Text>
+                  <Pressable
+                    style={[s`text-lg p-1 text-black  m-1`]}
+                    // onPress={() => handleItemPress(customer)}
+                    >
+                  <Text style={[s`text-lg p-1 text-black  m-1`]}>
+                   View Details
+                  </Text>
+                    
+                  </Pressable>
+                </ScrollView>
+              );
+            })}
+        </View>
+      </View>
     </View>
   );
 };
