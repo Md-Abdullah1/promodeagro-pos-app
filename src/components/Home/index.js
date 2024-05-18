@@ -73,8 +73,8 @@ const Home = () => {
 
   useEffect(() => {
     // getProduct();
-    // fetchOrders();
-    fetchCustomers();
+    fetchOrders();
+    // fetchCustomers();
   }, []);
 
 
